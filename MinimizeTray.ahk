@@ -10,8 +10,7 @@ hiddenWindows := []
     activeProcess := WinGetProcessName("A")
     activeTitle := WinGetTitle("A")
     
-    if InStr(activeTitle, "Visual Studio Code - Insiders") 
-    || activeProcess = "Code - Insiders.exe"
+    if activeProcess = "CodeLight.exe"
     {
         WinHide("ahk_id " activeID)
         A_TrayMenu.Add("Restore VSCode", RestoreVSCode)
@@ -41,15 +40,13 @@ hiddenWindows := []
     TrayTip("Window Hidden", cleanTitle " is now hidden`nRight-click tray icon to restore", 1)
 }
 
-; Update tray menu
+; Update Tray menu
 UpdateTrayMenu()
 {
     global hiddenWindows
     try A_TrayMenu.Delete("Restore Windows")
-    
     RestoreMenu := Menu()
-    
-    ; Add all hidden windows to restore menu
+
     for index, window in hiddenWindows
     {
         displayText := window["cleanTitle"]
@@ -94,12 +91,11 @@ RestoreWindow(index)
 RestoreVSCode(*)
 {
     DetectHiddenWindows(true)
-    ; Try to find and restore any hidden VSCode windows
     try {
-        if WinExist("ahk_exe Code - Insiders.exe")
+        if WinExist("ahk_exe CodeLight.exe")
         {
-            WinShow("ahk_exe Code - Insiders.exe")
-            WinActivate("ahk_exe Code - Insiders.exe")
+            WinShow("ahk_exe CodeLight.exe")
+            WinActivate("ahk_exe CodeLight.exe")
             TrayTip("VSCode Restored", "Restored from system tray", 1)
         }
         else
@@ -110,14 +106,12 @@ RestoreVSCode(*)
     try A_TrayMenu.Delete("Restore VSCode")
 }
 
-; Exit Script - Restore all windows
+; Exit Script (Restore)
 ExitScript(*)
 {
     global hiddenWindows
-    
     DetectHiddenWindows(true)
-    
-    ; Restore all custom hidden windows
+   
     for window in hiddenWindows
     {
         if WinExist("ahk_id " window["hwnd"])
@@ -126,11 +120,10 @@ ExitScript(*)
         }
     }
     
-    ; Restore VSCode windows if they exist
     try {
-        if WinExist("ahk_exe Code - Insiders.exe")
+        if WinExist("ahk_exe CodeLight.exe")
         {
-            WinShow("ahk_exe Code - Insiders.exe")
+            WinShow("ahk_exe CodeLight.exe")
         }
     }
     
@@ -144,11 +137,10 @@ OnExit(ExitFunc)
 ExitFunc(ExitReason, ExitCode)
 {
     DetectHiddenWindows(true)
-    ; Only restore VSCode if windows exist
     try {
-        if WinExist("ahk_exe Code - Insiders.exe")
+        if WinExist("ahk_exe CodeLight.exe")
         {
-            WinShow("ahk_exe Code - Insiders.exe")
+            WinShow("ahk_exe CodeLight.exe")
         }
     }
 }
